@@ -1,0 +1,36 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: $font-family-base;
+  color: $primary-black-color;
+  font-size: 16px;
+  font-weight: 400;
+  background-color: #F2F2F2;
+  scroll-behavior: smooth;
+}
+
+a {
+  text-decoration: none;
+  color: $primary-black-color;
+  transition: all 400ms;
+
+  &:hover,
+  &:active,
+  &:focus {
+    color: $primary-color !important;
+    opacity: 0.8;
+  }
+}
+
+h1, h2, h3, h4, h5, h6, p {
+  margin: 0;
+}
+
+h1 {
+  font-weight: 900;
+  font-size: 2.25em;
+}

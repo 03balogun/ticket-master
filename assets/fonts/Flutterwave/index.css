@@ -1,0 +1,27 @@
+@font-face {
+  font-family: "Flutterwave";
+  font-style: normal;
+  font-weight: 400;
+  src: url(FLW-Regular.ttf) format("truetype")
+}
+
+@font-face {
+  font-family: "Flutterwave";
+  font-style: italic;
+  font-weight: 400;
+  src: url(FLW-Italic.ttf) format("truetype")
+}
+
+@font-face {
+  font-family: "Flutterwave";
+  font-style: normal;
+  font-weight: 800;
+  src: url(FLW-Bold.ttf) format("truetype")
+}
+
+@font-face {
+  font-family: "Flutterwave";
+  font-style: normal;
+  font-weight: 900;
+  src: url(FLW-Black.ttf) format("truetype")
+}

@@ -1,0 +1,25 @@
+.events-section {
+  max-width: 1260px;
+  margin: auto;
+
+  &__header {
+    margin: 10vh 0 40px 33px;
+  }
+}
+
+.events {
+  @include reset-list;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(200px, 1fr));
+  grid-column-gap: 20px;
+  grid-row-gap: 30px;
+
+  @media (max-width: 768px) {
+    padding: 16px;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 600px) {
+    grid-template-columns: 100%;
+  }
+}

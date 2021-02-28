@@ -1,0 +1,30 @@
+$font-family-base: "Flutterwave", sans-serif;
+$primary-color: #F5A623;
+$primary-black-color: #333333;
+$gray-1: #4F4F4F;
+$gray-2: #4A4A4A;
+$red: #EB5757;
+$green: #219653;
+$white: #fff;
+
+
+/* Mixins */
+@mixin reset-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+// Font sizes
+@mixin fs-12 {
+  font-size: 0.75em;
+}
+@mixin fs-14 {
+  font-size: 0.875em;
+}
+@mixin fs-18 {
+  font-size: 1.125em;
+}
+@mixin fs-gray-1{
+  color: $gray-1;
+}
