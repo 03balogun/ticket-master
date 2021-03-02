@@ -1,0 +1,152 @@
+.container {
+  padding: 50px 133px;
+}
+
+.close-button {
+  @include fs-18;
+  background: #ffffff;
+  border-radius: 60px;
+  border: 0;
+  filter: drop-shadow(-1px 2px 4px rgba(0, 0, 0, 0.25));
+  padding: 13px 27px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+
+  svg {
+    margin-right: 7px;
+  }
+}
+
+.cart-section {
+  &__header {
+    margin-top: 60px;
+  }
+  &__time {
+    @include fs-18;
+    font-family: 'Open Sans', sans-serif;
+    display: inline-block;
+    margin-top: 5px;
+    color: $gray-2;
+    text-transform: uppercase;
+    font-weight: 300;
+  }
+
+  &__info {
+    @include fs-14;
+    display: inline-block;
+    line-height: 28px;
+    letter-spacing: 0.5px;
+    color: #828282;
+    margin-top: 14px;
+  }
+}
+
+.tickets-table {
+  margin-top: 80px;
+  max-width: 689px;
+  width: 100%;
+  border-spacing: 0;
+
+  tr {
+    td {
+      padding: 20px 0 25px;
+
+      @include fs-24;
+      &:not(:first-child) {
+        font-weight: bold;
+        text-align: center;
+      }
+
+      &:last-child {
+        display: flex;
+        justify-content: flex-end;
+      }
+    }
+
+    &:not(:first-child) {
+      td {
+        border-top: 1px solid #bdbdbd;
+      }
+    }
+
+    &:last-child {
+      td {
+        border-bottom: 1px solid #bdbdbd;
+      }
+    }
+  }
+}
+
+.action {
+  display: flex;
+  &__btn {
+    height: 20px;
+    width: 20px;
+    border-radius: 100%;
+    filter: drop-shadow(-1px 1px 2px rgba(0, 0, 0, 0.25));
+    background-color: #fff;
+    outline: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    cursor: pointer;
+    padding: 5px;
+  }
+  span {
+    display: inline-block;
+    margin: 0 16px;
+  }
+}
+
+/deep/ .summary-section {
+  position: absolute;
+  height: 100%;
+  background: #ffffff;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  width: 32.63%;
+  top: 0;
+  right: 0;
+  padding: 50px;
+
+  strong {
+    @include fs-18;
+    font-weight: bold;
+    line-height: 22px;
+  }
+
+  hr {
+    border: 1px solid #bdbdbd;
+    margin: 30px 0;
+  }
+}
+
+.show-summary-button {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 24px 16px;
+  }
+
+  .show-summary-button {
+    display: block;
+  }
+
+  .summary-section {
+    position: fixed;
+    overflow: scroll;
+    transform: translateX(100%);
+    width: 100%;
+    padding: 50px 25px;
+    transition: all 400ms ease-in-out;
+  }
+
+  .show-summary {
+    transform: translateX(0);
+    transition: transform 400ms ease-in-out;
+  }
+
+}

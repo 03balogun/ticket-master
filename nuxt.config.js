@@ -1,4 +1,7 @@
 export default {
+  server: {
+    host: '0.0.0.0',
+  },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: 'events-fw',
@@ -7,7 +10,10 @@ export default {
     },
     meta: [
       { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      {
+        name: 'viewport',
+        content: 'width=device-width, initial-scale=1, shrink-to-fit=no',
+      },
       { hid: 'description', name: 'description', content: '' },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
@@ -38,7 +44,7 @@ export default {
     '@nuxtjs/svg',
   ],
   styleResources: {
-    scss: ['./assets/scss/_variables.scss'],
+    scss: ['./assets/scss/_variables.scss', './assets/scss/_mixins.scss'],
   },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios

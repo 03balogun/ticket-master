@@ -1,10 +1,13 @@
 <template>
-  <div class="container">
-    <the-navbar />
-    <main>
-      <Nuxt />
-    </main>
-    <the-footer />
+  <div>
+    <div class="container">
+      <the-navbar />
+      <main>
+        <Nuxt />
+      </main>
+      <the-footer />
+    </div>
+    <app-modal />
   </div>
 </template>
 

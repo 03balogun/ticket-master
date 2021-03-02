@@ -3,3 +3,17 @@
 @import "~assets/scss/custom-reset.scss";
 @import "~assets/scss/utilities.scss";
 @import "~assets/scss/button.scss";
+.body-bg {
+  background-image: url(~/assets/images/lines.svg);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: 100%;
+}
+.modal-open {
+  overflow: hidden;
+}
+@media (max-width: 768px) {
+  .body-bg {
+    background-image: none;
+  }
+}

@@ -36,4 +36,15 @@ export default {
     }
   }
 }
+
+@media (max-width: 768px) {
+  .footer {
+    flex-direction: column;
+    align-items: center;
+
+    ul {
+      margin-top: 24px;
+    }
+  }
+}
 </style>
