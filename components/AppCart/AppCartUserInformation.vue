@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="createOrder">
+  <form @submit.prevent="makePayment">
     <a
       href="javascript:"
       class="back-button"
@@ -8,7 +8,9 @@
     >
       <arrow-left-icon /> <strong>Go back</strong>
     </a>
+
     <hr />
+
     <app-input
       id="full_name"
       v-model="formData.name"
@@ -21,6 +23,7 @@
     <app-input
       id="email_address"
       v-model="formData.email"
+      type="email"
       label="Email Address"
       name="email_address"
       required
@@ -30,6 +33,7 @@
     <app-input
       id="phone_number"
       v-model="formData.phone"
+      type="tel"
       label="Phone Number"
       name="phone_number"
       required
@@ -42,7 +46,7 @@
         <tr>
           <td>TOTAL PAYMENT</td>
           <td class="total_amount">
-            {{ totalPayment | currency(ticketCurrency) }}
+            {{ totalAmount | currency(ticketCurrency) }}
           </td>
         </tr>
       </tbody>
@@ -52,7 +56,7 @@
       class="button button--md button--block mt-30"
     >
       <span v-if="!isCreating">
-        PAY {{ totalPayment | currency(ticketCurrency) }}
+        PAY {{ totalAmount | currency(ticketCurrency) }}
       </span>
       <span v-else> Please wait... </span>
     </button>
@@ -75,14 +79,40 @@ export default {
     }
   },
   computed: {
+    paymentData() {
+      return {
+        class: 'button button--md button--block mt-30',
+        tx_ref: this.generateReference(),
+        amount: this.totalAmount,
+        currency: this.ticketCurrency,
+        payment_options: 'card',
+        customer: {
+          ...this.formData,
+          phone_number: this.formData.phone,
+        },
+        customizations: {
+          title: 'Ticket Master',
+          description: `${this.currentEvent.name} - ${this.totalQuantity} ticket(s)`,
+          logo: 'https://flutterwave.com/images/logo-colored.svg',
+        },
+        callback: this.makePaymentCallback,
+        onclose: this.paymentModalClose,
+      }
+    },
+    currentEvent() {
+      return this.$store.getters['events/getCurrentEvent']
+    },
     isCreating() {
       return this.$store.getters['order/getIsCreating']
     },
     isEmptyCart() {
       return this.$store.getters['cart/getIsEmptyCart']
     },
-    totalPayment() {
-      return this.$store.getters['cart/getTotalPayment']
+    totalQuantity() {
+      return this.$store.getters['cart/getTotalQuantity']
+    },
+    totalAmount() {
+      return this.$store.getters['cart/getTotalAmount']
     },
     subTotalAmount() {
       return this.$store.getters['cart/getSubTotalAmount']
@@ -98,22 +128,24 @@ export default {
     },
   },
   methods: {
-    createOrder() {
-      const ticketsBought = {}
-      for (const [ticketId, ticket] of Object.entries(this.cartTickets)) {
-        if (ticket.quantity > 0) ticketsBought[ticketId] = ticket.quantity
-      }
-
-      const payload = {
-        ...this.formData,
-        base_amount: this.subTotalAmount,
-        value_added_tax: this.vat,
-        tickets_bought: ticketsBought,
-      }
-
-      this.$store.dispatch('order/createOrder', payload)
-
-      // Make payment
+    async makePayment() {
+      await this.asyncPayWithFlutterwave(this.paymentData)
+    },
+    makePaymentCallback() {
+      this.$notify({
+        text: `Payment was successful, thank you for choosing ticket master`,
+        type: 'success',
+      })
+      // clear cart
+      this.$store.dispatch('cart/clearCart')
+      // redirect home
+      this.$router.push('/')
+    },
+    paymentModalClose() {
+      //
+    },
+    generateReference() {
+      return new Date().getTime().toString()
     },
   },
 }

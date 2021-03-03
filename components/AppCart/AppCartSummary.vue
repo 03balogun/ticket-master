@@ -42,7 +42,7 @@
         <tr>
           <td>TOTAL PAYMENT</td>
           <td class="total_amount">
-            {{ totalPayment | currency(ticketCurrency) }}
+            {{ totalAmount | currency(ticketCurrency) }}
           </td>
         </tr>
       </tbody>
@@ -82,8 +82,8 @@ export default {
     subTotalAmount() {
       return this.$store.getters['cart/getSubTotalAmount']
     },
-    totalPayment() {
-      return this.$store.getters['cart/getTotalPayment']
+    totalAmount() {
+      return this.$store.getters['cart/getTotalAmount']
     },
     cartItems() {
       return this.$store.getters['cart/getCartTickets']

@@ -29,6 +29,7 @@ export default {
     '~/plugins/vue-notification.js',
     '~/plugins/axios.js',
     '~/plugins/filters.js',
+    '~/plugins/flutterwave.js',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

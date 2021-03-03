@@ -35,7 +35,7 @@ export const getters = {
   getSubTotalAmount: (state) => {
     return getPropertyTotal(state.cartTickets, 'totalPrice')
   },
-  getTotalPayment(_, getters) {
+  getTotalAmount(_, getters) {
     return getters.getSubTotalAmount + getters.getVat
   },
   getTicketCurrency(_, getters) {
@@ -91,6 +91,12 @@ export const actions = {
         ...state.cartTickets,
         [ticket.id]: { ...ticket, ...properties },
       },
+    })
+  },
+  clearCart({ commit }) {
+    commit('SET_STATE', {
+      key: 'cartTickets',
+      value: {},
     })
   },
 }

@@ -16,8 +16,7 @@ export const actions = {
   async createOrder({ commit, state }, payload) {
     commit('SET_STATE', { key: 'isCreating', value: true })
     try {
-      const { data } = await this.$axios.$post(`/orders`, payload)
-      //
+      await this.$axios.$post(`/orders`, payload)
     } catch (e) {
       //
     }
