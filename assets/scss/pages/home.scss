@@ -7,6 +7,43 @@
   }
 }
 
+.load-more {
+  width: 100%;
+  margin: 80px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &__active {
+    @include fs-18;
+  }
+
+  &__btn {
+    @include fs-18;
+    border: 0;
+    display: flex;
+    align-items: center;
+    background-color: transparent;
+    cursor: pointer;
+    transition: all 400ms;
+
+    svg {
+      margin-left: 10px;
+      fill: $primary-black-color;
+      transition: all 400ms;
+    }
+
+    &:hover {
+      color: $primary-color !important;
+
+      svg {
+        fill: $primary-color;
+      }
+    }
+  }
+}
+
+
 .events {
   @include reset-list;
   display: grid;

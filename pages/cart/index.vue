@@ -4,67 +4,32 @@
       <button
         class="close-button"
         aria-label="close cart"
-        @click="$router.push('/')"
+        @click="$router.back()"
       >
         <close-icon /> Close
       </button>
       <section class="cart-section">
-        <h1 class="cart-section__header">The Nathan Cole Experience</h1>
-        <time class="cart-section__time" datetime="8th February 2019"
-          >8th February 2019</time
-        >
-        <table class="tickets-table">
-          <tbody>
-            <tr>
-              <td>Regular</td>
-              <td>N5000</td>
-              <td>
-                <div class="action">
-                  <button class="action__btn" aria-label="decrease item">
-                    <minus-icon />
-                  </button>
-                  <span>3</span>
-                  <button class="action__btn" aria-label="increase item">
-                    <plus-icon />
-                  </button>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>VIP</td>
-              <td>N5000</td>
-              <td>
-                <div class="action">
-                  <button class="action__btn" aria-label="decrease item">
-                    <minus-icon />
-                  </button>
-                  <span>3</span>
-                  <button class="action__btn" aria-label="increase item">
-                    <plus-icon />
-                  </button>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>Table for 5</td>
-              <td>N5000</td>
-              <td>
-                <div class="action">
-                  <button class="action__btn" aria-label="decrease item">
-                    <minus-icon />
-                  </button>
-                  <span>3</span>
-                  <button class="action__btn" aria-label="increase item">
-                    <plus-icon />
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <span class="cart-section__info"
-          >Ticket sales ends on 22nd November 2019</span
-        >
+        <app-cart-shimmer v-if="fetchingCurrentEvent" />
+        <template v-if="!fetchingCurrentEvent && isFoundEvent">
+          <h1 class="cart-section__header">{{ currentEvent.name }}</h1>
+          <time
+            itemprop="startDate"
+            class="cart-section__time"
+            :datetime="currentEvent.start_time"
+            >{{ currentEvent.start_time | formatDate }}</time
+          >
+          <app-cart-tickets />
+          <span class="cart-section__info"
+            >Ticket sales ends on
+            <time itemprop="endDate" :datetime="currentEvent.end_time">{{
+              currentEvent.end_time | formatDate
+            }}</time></span
+          >
+        </template>
+        <app-alert-card v-if="isNotFound" class="mt-30">
+          <h1>Event not found</h1>
+          <nuxt-link to="/">Go back home</nuxt-link>
+        </app-alert-card>
       </section>
       <button
         class="button button--md button--block mt-30 show-summary-button"
@@ -72,25 +37,41 @@
       >
         Order Summary
       </button>
-      <aside class="summary-section" :class="{ 'show-summary': showSide }">
-        <app-order-summary :toggle-display="toggleSummarySection" />
-        <!--      <app-order-user-information />-->
+      <aside
+        class="summary-section"
+        :class="{ 'show-summary': showSide, 'p-0': fetchingCurrentEvent }"
+      >
+        <app-shimmer-effect
+          v-if="fetchingCurrentEvent"
+          :style="{ height: '100%', width: '100%', marginTop: '0' }"
+        />
+        <template v-if="!fetchingCurrentEvent && isFoundEvent">
+          <component
+            :is="currentScreen"
+            v-bind="currentScreenProperties"
+            @switchScreen="switchScreen"
+          />
+        </template>
       </aside>
     </main>
   </div>
 </template>
 
 <script>
+import AppCartSummary from '~/components/AppCart/AppCartSummary'
+import AppCartUserInformation from '~/components/AppCart/AppCartUserInformation'
 import CloseIcon from '~/assets/images/close-icon.svg?inline'
-import MinusIcon from '~/assets/images/minus-icon.svg?inline'
-import PlusIcon from '~/assets/images/plus-icon.svg?inline'
 export default {
   name: 'Cart',
-  components: { CloseIcon, MinusIcon, PlusIcon },
+  components: { CloseIcon, AppCartSummary, AppCartUserInformation },
   layout: 'blank',
+  validate({ query }) {
+    return query.id
+  },
   data() {
     return {
       showSide: false,
+      currentScreen: 'AppCartSummary',
     }
   },
   head() {
@@ -106,18 +87,45 @@ export default {
     }
   },
   computed: {
+    currentScreenProperties() {
+      if (this.isSummaryScreen) {
+        return { 'toggle-display': this.toggleSummarySection }
+      }
+      return {}
+    },
+    isSummaryScreen() {
+      return this.currentScreen === 'AppCartSummary'
+    },
+    isFoundEvent() {
+      return !this.fetchingCurrentEvent && this.currentEvent.id
+    },
+    isNotFound() {
+      return !this.fetchingCurrentEvent && !this.currentEvent.id
+    },
     currentEvent() {
       return this.$store.getters['events/getCurrentEvent']
     },
+    fetchingCurrentEvent() {
+      return this.$store.getters['events/getFetchingCurrentEvent']
+    },
+  },
+  created() {
+    this.fetchEventDetail()
   },
   methods: {
+    fetchEventDetail() {
+      this.$store.dispatch('events/fetchSingleEvent', this.$route.query.id)
+    },
     toggleSummarySection() {
       this.showSide = !this.showSide
+    },
+    switchScreen(componentName) {
+      this.currentScreen = componentName
     },
   },
 }
 </script>
 
 <style lang="scss" scoped>
-@import '~~/assets/scss/pages/cart';
+@import '~assets/scss/pages/cart';
 </style>

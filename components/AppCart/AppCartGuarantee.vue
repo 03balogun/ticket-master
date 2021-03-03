@@ -12,7 +12,7 @@
 import VerifiedIcon from '~/assets/images/verified-icon.svg?inline'
 
 export default {
-  name: 'AppOrderGuarantee',
+  name: 'AppCartGuarantee',
   components: {
     VerifiedIcon,
   },

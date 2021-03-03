@@ -30,8 +30,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.d-block {
-  display: block !important;
-}
-</style>
+<style lang="scss" scoped></style>

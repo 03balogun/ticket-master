@@ -31,7 +31,7 @@
 
 <script>
 import CloseIcon from '~/assets/images/close-icon.svg?inline'
-import AppModalRegister from '~/components/AppModalRegister'
+import AppModalRegister from '~/components/AppModal/AppModalRegister'
 /* eslint-disable nuxt/no-globals-in-created */
 export default {
   name: 'AppModal',
@@ -68,5 +68,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~assets/scss/components/app-modal';
+@import '~~/assets/scss/components/app-modal';
 </style>

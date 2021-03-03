@@ -13,13 +13,15 @@ export default {
   watch: {
     modal(newVal, oldVal) {
       if (!newVal.isOpen) {
-        this.$router.replace(`/event?id=${this.$route.query.id}`)
+        this.$router.replace(
+          `/event/${this.$route.params.title}?id=${this.$route.query.id}`
+        )
       }
     },
   },
   created() {
     this.$store.dispatch('modal/setModal', {
-      closeable: false,
+      closeable: true,
       isOpen: true,
       component: 'AppModalRegister',
       headerText: 'REGISTER FOR FREE',

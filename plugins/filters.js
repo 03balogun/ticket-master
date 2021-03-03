@@ -1,18 +1,27 @@
-import Vue from 'vue';
-import dayjs from 'dayjs';
+import Vue from 'vue'
+import dayjs from 'dayjs'
+import advancedFormat from 'dayjs/plugin/advancedFormat'
+dayjs.extend(advancedFormat)
 
-Vue.filter('currency', function (value) {
-  if (!value || isNaN(value)) value = 0;
+Vue.filter('currency', function (value, currency = 'NGN') {
+  if (!value || isNaN(value)) value = 0
   const formatter = new Intl.NumberFormat('en-NG', {
+    currency,
     style: 'currency',
-    currency: 'NGN',
     minimumFractionDigits: 0,
     maximumFractionDigits: 2,
-  });
-  return formatter.format(value);
-});
+  })
+  return formatter.format(value)
+})
 
 Vue.filter('formatDateTime', function (value) {
-  if (!value) value = '--';
-  return dayjs(value).format('D MMM, YYYY h:mmA'); // 16 Jul, 2020 2:00PM
-});
+  if (!value) value = '--'
+  return dayjs(value).format('dddd, MMMM Do YYYY, h:mmA') // Friday, February 8th 2019, 10:00pm
+})
+
+Vue.filter('formatDate', function (value) {
+  if (!value) value = '--'
+  return dayjs(value).format('Do MMMM YYYY') // 16th July, 2020
+})
+
+Vue.prototype.$slug = (title) => title.toLowerCase().replace(/ /gi, '-')

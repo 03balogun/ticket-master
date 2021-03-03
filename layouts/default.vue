@@ -8,6 +8,7 @@
       <the-footer />
     </div>
     <app-modal />
+    <app-toast-notification />
   </div>
 </template>
 

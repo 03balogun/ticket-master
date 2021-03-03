@@ -1,10 +1,12 @@
 export default {
-  server: {
-    host: '0.0.0.0',
+  publicRuntimeConfig: {
+    axios: {
+      baseURL: process.env.BASE_URL,
+    },
   },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'events-fw',
+    title: 'Ticket Master',
     htmlAttrs: {
       lang: 'en',
     },
@@ -23,7 +25,11 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: [
+    '~/plugins/vue-notification.js',
+    '~/plugins/axios.js',
+    '~/plugins/filters.js',
+  ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -52,11 +58,6 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-    extend(config, { isDev, isClient }) {
-      // config.module.rules.push({
-      //   test: /.\/.*\.(woff(2)?|eot|eot@|ttf)?(.v=[0-9]\.[0-9]\.[0-9])?$/,
-      //   loader: 'file-loader?name="[name]-[hash].[ext]"',
-      // })
-    },
+    extend(config, { isDev, isClient }) {},
   },
 }

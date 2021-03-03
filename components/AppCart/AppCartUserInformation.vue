@@ -1,54 +1,126 @@
 <template>
-  <form @submit.prevent="">
-    <nuxt-link class="back-button" to="/">
+  <form @submit.prevent="createOrder">
+    <a
+      href="javascript:"
+      class="back-button"
+      aria-label="Back to cart summary screen"
+      @click="$emit('switchScreen', 'AppCartSummary')"
+    >
       <arrow-left-icon /> <strong>Go back</strong>
-    </nuxt-link>
+    </a>
     <hr />
     <app-input
       id="full_name"
+      v-model="formData.name"
       label="Full name"
       name="full_name"
       required
       placeholder=""
+      :disabled="isCreating"
     />
     <app-input
       id="email_address"
+      v-model="formData.email"
       label="Email Address"
       name="email_address"
       required
       placeholder=""
+      :disabled="isCreating"
     />
     <app-input
       id="phone_number"
+      v-model="formData.phone"
       label="Phone Number"
       name="phone_number"
       required
       placeholder=""
+      :disabled="isCreating"
     />
 
     <table class="summary-table">
       <tbody>
         <tr>
           <td>TOTAL PAYMENT</td>
-          <td class="total_amount">N111,000</td>
+          <td class="total_amount">
+            {{ totalPayment | currency(ticketCurrency) }}
+          </td>
         </tr>
       </tbody>
     </table>
-    <button class="button button--md button--block mt-30">PAY N111,000</button>
-    <app-order-guarantee v-once />
+    <button
+      :disabled="isCreating"
+      class="button button--md button--block mt-30"
+    >
+      <span v-if="!isCreating">
+        PAY {{ totalPayment | currency(ticketCurrency) }}
+      </span>
+      <span v-else> Please wait... </span>
+    </button>
+    <app-cart-guarantee v-once />
   </form>
 </template>
 
 <script>
 import ArrowLeftIcon from '~/assets/images/arrow-left-icon.svg?inline'
 export default {
-  name: 'AppOrderUserInformation',
+  name: 'AppCartUserInformation',
   components: { ArrowLeftIcon },
+  data() {
+    return {
+      formData: {
+        email: '',
+        phone: '',
+        name: '',
+      },
+    }
+  },
+  computed: {
+    isCreating() {
+      return this.$store.getters['order/getIsCreating']
+    },
+    isEmptyCart() {
+      return this.$store.getters['cart/getIsEmptyCart']
+    },
+    totalPayment() {
+      return this.$store.getters['cart/getTotalPayment']
+    },
+    subTotalAmount() {
+      return this.$store.getters['cart/getSubTotalAmount']
+    },
+    ticketCurrency() {
+      return this.$store.getters['cart/getTicketCurrency']
+    },
+    vat() {
+      return this.$store.getters['cart/getVat']
+    },
+    cartTickets() {
+      return this.$store.getters['cart/getCartTickets']
+    },
+  },
+  methods: {
+    createOrder() {
+      const ticketsBought = {}
+      for (const [ticketId, ticket] of Object.entries(this.cartTickets)) {
+        if (ticket.quantity > 0) ticketsBought[ticketId] = ticket.quantity
+      }
+
+      const payload = {
+        ...this.formData,
+        base_amount: this.subTotalAmount,
+        value_added_tax: this.vat,
+        tickets_bought: ticketsBought,
+      }
+
+      this.$store.dispatch('order/createOrder', payload)
+
+      // Make payment
+    },
+  },
 }
 </script>
 
 <style lang="scss" scoped>
-@import '~~/assets/scss/components/app-order-summary.scss';
+@import '~~/assets/scss/components/app-cart-summary.scss';
 .summary-table {
   margin-top: 40px;
 }

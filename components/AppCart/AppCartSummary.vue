@@ -9,44 +9,59 @@
     <hr />
     <div class="summary-table-container">
       <table class="summary-table">
-        <tbody>
+        <tbody v-if="!isEmptyCart">
+          <template v-for="ticket in cartItems">
+            <tr v-if="ticket.quantity !== 0" :key="ticket.id">
+              <td>{{ ticket.quantity }} - {{ ticket.name }}</td>
+              <td>{{ ticket.totalPrice | currency(ticketCurrency) }}</td>
+            </tr>
+          </template>
+        </tbody>
+        <tbody v-else>
           <tr>
-            <td>2 - Regular</td>
-            <td>N10,000</td>
-          </tr>
-          <tr>
-            <td>1 - Regular</td>
-            <td>N10,000</td>
+            <td colspan="2" class="text-center">You have no items in cart</td>
           </tr>
         </tbody>
       </table>
     </div>
     <hr />
-    <table class="summary-table">
+    <table v-if="!isEmptyCart" class="summary-table">
       <tbody>
         <tr>
+          <td>Total Tickets</td>
+          <td>{{ totalQuantity }}</td>
+        </tr>
+        <tr>
           <td>Sub-total</td>
-          <td>N110,000</td>
+          <td>{{ subTotalAmount | currency(ticketCurrency) }}</td>
         </tr>
         <tr>
           <td>VAT</td>
-          <td>N1,000</td>
+          <td>{{ vat | currency(ticketCurrency) }}</td>
         </tr>
         <tr>
           <td>TOTAL PAYMENT</td>
-          <td class="total_amount">N111,000</td>
+          <td class="total_amount">
+            {{ totalPayment | currency(ticketCurrency) }}
+          </td>
         </tr>
       </tbody>
     </table>
-    <button class="button button--md button--block mt-30">Continue</button>
-    <app-order-guarantee v-once />
+    <button
+      v-if="!isEmptyCart"
+      class="button button--md button--block mt-30"
+      @click="$emit('switchScreen', 'AppCartUserInformation')"
+    >
+      Continue
+    </button>
+    <app-cart-guarantee v-once />
   </div>
 </template>
 
 <script>
 import ArrowLeftIcon from '~/assets/images/arrow-left-icon.svg?inline'
 export default {
-  name: 'AppOrderSummary',
+  name: 'AppCartSummary',
   components: { ArrowLeftIcon },
   props: {
     toggleDisplay: {
@@ -54,9 +69,32 @@ export default {
       required: true,
     },
   },
+  computed: {
+    vat() {
+      return this.$store.getters['cart/getVat']
+    },
+    isEmptyCart() {
+      return this.$store.getters['cart/getIsEmptyCart']
+    },
+    totalQuantity() {
+      return this.$store.getters['cart/getTotalQuantity']
+    },
+    subTotalAmount() {
+      return this.$store.getters['cart/getSubTotalAmount']
+    },
+    totalPayment() {
+      return this.$store.getters['cart/getTotalPayment']
+    },
+    cartItems() {
+      return this.$store.getters['cart/getCartTickets']
+    },
+    ticketCurrency() {
+      return this.$store.getters['cart/getTicketCurrency']
+    },
+  },
 }
 </script>
 
 <style lang="scss" scoped>
-@import '~~/assets/scss/components/app-order-summary.scss';
+@import '~assets/scss/components/app-cart-summary.scss';
 </style>

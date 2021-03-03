@@ -1,6 +1,7 @@
 <template>
   <div>
     <Nuxt />
+    <app-toast-notification />
   </div>
 </template>
 
