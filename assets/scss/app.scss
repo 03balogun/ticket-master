@@ -12,6 +12,33 @@
 .modal-open {
   overflow: hidden;
 }
+@keyframes fade {
+  from {
+    transform: translate3d(0, 40px, 0);
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+    opacity: 1
+  }
+}
+
+.fade-leave-to {
+  opacity: 0;
+  transition: opacity .3s;
+}
+
+.fade-enter {
+  opacity: 0;
+  transform: translate3d(0, 40px, 0);
+}
+
+.fade-enter-to {
+  opacity: 0;
+  animation-duration: .7s;
+  animation-fill-mode: both;
+  animation-name: fade;
+}
 @media (max-width: 768px) {
   .body-bg {
     background-image: none;

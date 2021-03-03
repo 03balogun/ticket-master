@@ -61,4 +61,5 @@ export default {
   build: {
     extend(config, { isDev, isClient }) {},
   },
+  transition: 'fade',
 }

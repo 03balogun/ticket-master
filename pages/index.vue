@@ -1,7 +1,8 @@
 <template>
   <section class="events-section">
     <h1 class="events-section__header">The best events happening now.</h1>
-    <ul class="events">
+
+    <transition-group tag="ul" name="fade" mode="out-in" class="events">
       <template v-if="isLoadingEvents">
         <app-event-card-shimmer v-for="placeholder in 6" :key="placeholder" />
       </template>
@@ -21,7 +22,8 @@
           </button>
         </app-alert-card>
       </template>
-    </ul>
+    </transition-group>
+
     <div v-if="hasMorePage" class="load-more">
       <button
         v-if="!loadingMoreEvents"
