@@ -93,6 +93,23 @@ export default {
       showSide: false,
     }
   },
+  head() {
+    return {
+      title: `Tickets - ${this.currentEvent.name}`,
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: this.currentEvent.description,
+        },
+      ],
+    }
+  },
+  computed: {
+    currentEvent() {
+      return this.$store.getters['events/getCurrentEvent']
+    },
+  },
   methods: {
     toggleSummarySection() {
       this.showSide = !this.showSide
@@ -102,5 +119,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~assets/scss/pages/cart';
+@import '~~/assets/scss/pages/cart';
 </style>

@@ -58,5 +58,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~assets/scss/components/app-order-summary.scss';
+@import '~~/assets/scss/components/app-order-summary.scss';
 </style>
