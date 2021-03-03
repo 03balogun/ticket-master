@@ -30,6 +30,7 @@ export default {
     '~/plugins/axios.js',
     '~/plugins/filters.js',
     '~/plugins/flutterwave.js',
+    { src: '~/plugins/vuex-persist', ssr: false },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -39,6 +40,8 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/eslint
     '@nuxtjs/eslint-module',
+    // https://pwa.nuxtjs.org
+    '@nuxtjs/pwa',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -62,4 +65,11 @@ export default {
     extend(config, { isDev, isClient }) {},
   },
   transition: 'fade',
+  pwa: {
+    manifest: {
+      name: 'Ticket Master',
+      lang: 'TM',
+      useWebmanifestExtension: false,
+    },
+  },
 }

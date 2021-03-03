@@ -1,5 +1,6 @@
 {
   "name": "ticket-master",
+  "description": "Seamlessly buy event tickets",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -19,11 +20,13 @@
     "dayjs": "^1.10.4",
     "flutterwave-vue-v3": "^1.0.5",
     "nuxt": "^2.14.12",
-    "vue-notification": "^1.3.20"
+    "vue-notification": "^1.3.20",
+    "vuex-persist": "^3.1.3"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^5.0.0",
     "@nuxtjs/eslint-module": "^3.0.2",
+    "@nuxtjs/pwa": "^3.3.5",
     "@vue/test-utils": "^1.1.2",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.1.0",
