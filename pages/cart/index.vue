@@ -59,11 +59,11 @@
 
 <script>
 import AppCartSummary from '~/components/AppCart/AppCartSummary'
-import AppCartUserInformation from '~/components/AppCart/AppCartUserInformation'
+import AppCartCheckout from '~/components/AppCart/AppCartCheckout'
 import CloseIcon from '~/assets/images/close-icon.svg?inline'
 export default {
   name: 'Cart',
-  components: { CloseIcon, AppCartSummary, AppCartUserInformation },
+  components: { CloseIcon, AppCartSummary, AppCartCheckout },
   layout: 'blank',
   validate({ query }) {
     return query.id
@@ -114,7 +114,13 @@ export default {
   },
   methods: {
     fetchEventDetail() {
-      this.$store.dispatch('events/fetchSingleEvent', this.$route.query.id)
+      const eventId = this.$route.query.id
+      this.$store.dispatch('events/fetchSingleEvent', eventId)
+
+      // When we have a different event, clear cart
+      if (eventId !== this.currentEvent.id) {
+        this.$store.dispatch('cart/clearCart')
+      }
     },
     toggleSummarySection() {
       this.showSide = !this.showSide

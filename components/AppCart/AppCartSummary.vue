@@ -50,7 +50,7 @@
     <button
       v-if="!isEmptyCart"
       class="button button--md button--block mt-30"
-      @click="$emit('switchScreen', 'AppCartUserInformation')"
+      @click="$emit('switchScreen', 'AppCartCheckout')"
     >
       Continue
     </button>

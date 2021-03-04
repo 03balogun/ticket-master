@@ -67,7 +67,7 @@
 <script>
 import ArrowLeftIcon from '~/assets/images/arrow-left-icon.svg?inline'
 export default {
-  name: 'AppCartUserInformation',
+  name: 'AppCartCheckout',
   components: { ArrowLeftIcon },
   data() {
     return {
@@ -129,19 +129,31 @@ export default {
   },
   methods: {
     async makePayment() {
-      const response = await this.asyncPayWithFlutterwave(this.paymentData)
-      const isSuccess = response?.status === 'successful'
-      if (isSuccess) {
-        this.closePaymentModal()
+      try {
+        const response = await this.asyncPayWithFlutterwave(this.paymentData)
+        const isSuccess = response?.status === 'successful'
+        if (isSuccess) {
+          this.closePaymentModal(2)
+
+          await this.clearCart()
+        }
+      } catch (e) {
+        // Error occurs when not network to load flw js
         this.$notify({
-          text: `Payment was successful, thank you for choosing ticket master`,
-          type: 'success',
+          text: `Payment page could not be loaded, please check your network and try again`,
+          type: 'error',
+          title: 'Error',
         })
-        // clear cart
-        await this.$store.dispatch('cart/clearCart')
-        // redirect home
-        await this.$router.back()
       }
+    },
+    async clearCart() {
+      // clear cart
+      await this.$store.dispatch('cart/clearCart')
+
+      // redirect to event detail
+      await this.$router.push(
+        `event/${this.$slug(this.currentEvent.name)}?id=${this.currentEvent.id}`
+      )
     },
     paymentModalClose() {
       //

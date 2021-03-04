@@ -44,7 +44,7 @@
 }
 
 
-.events {
+.events, .shimmer-container {
   @include reset-list;
   display: grid;
   grid-template-columns: repeat(3, minmax(200px, 1fr));

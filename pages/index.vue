@@ -2,29 +2,28 @@
   <section class="events-section">
     <h1 class="events-section__header">The best events happening now.</h1>
 
-    <transition-group tag="ul" name="fade" mode="out-in" class="events">
-      <template v-if="isLoadingEvents">
-        <app-event-card-shimmer v-for="placeholder in 6" :key="placeholder" />
-      </template>
+    <div v-if="isLoadingEvents" class="shimmer-container">
+      <app-event-card-shimmer v-for="placeholder in 6" :key="placeholder" />
+    </div>
 
-      <template v-if="!isLoadingEvents">
-        <app-event-card
-          v-for="event in events"
-          :key="event.id"
-          :event="event"
-        />
-      </template>
-      <template v-if="!isLoadingEvents && events.length === 0">
-        <app-alert-card>
-          <h2>No events at the moment</h2>
-          <button class="button button--md mt-10" @click="loadEvents">
-            Refresh
-          </button>
-        </app-alert-card>
-      </template>
+    <transition-group
+      v-if="!isLoadingEvents && hasEvent"
+      tag="ul"
+      name="fade"
+      mode="out-in"
+      class="events"
+    >
+      <app-event-card v-for="event in events" :key="event.id" :event="event" />
     </transition-group>
 
-    <div v-if="hasMorePage" class="load-more">
+    <app-alert-card v-if="!isLoadingEvents && !hasEvent">
+      <h2>No events at the moment</h2>
+      <button class="button button--md mt-10" @click="loadEvents">
+        Refresh
+      </button>
+    </app-alert-card>
+
+    <div v-if="!isLoadingEvents && hasMorePage" class="load-more">
       <button
         v-if="!loadingMoreEvents"
         class="load-more__btn"
@@ -43,6 +42,9 @@ import ArrowRightIcon from '~/assets/images/arrow-right-icon.svg?inline'
 export default {
   components: { ArrowRightIcon },
   computed: {
+    hasEvent() {
+      return this.events.length > 0
+    },
     events() {
       return this.$store.getters['events/getEvents']
     },

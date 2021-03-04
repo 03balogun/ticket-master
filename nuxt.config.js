@@ -1,4 +1,8 @@
 export default {
+  // Disable server-side rendering (https://go.nuxtjs.dev/ssr-mode)
+  ssr: false,
+  // Target (https://go.nuxtjs.dev/config-target)
+  target: 'static',
   publicRuntimeConfig: {
     axios: {
       baseURL: process.env.BASE_URL,
@@ -68,7 +72,9 @@ export default {
   pwa: {
     manifest: {
       name: 'Ticket Master',
-      lang: 'TM',
+      short_name: 'TM',
+      theme_color: '#F5A623',
+      lang: 'en',
       useWebmanifestExtension: false,
     },
   },

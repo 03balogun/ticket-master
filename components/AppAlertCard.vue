@@ -27,5 +27,9 @@ export default {
   h1 {
     margin-bottom: 10px;
   }
+
+  @media (max-width: 768px) {
+    grid-column: 1;
+  }
 }
 </style>
