@@ -81,4 +81,23 @@ export default {
       useWebmanifestExtension: false,
     },
   },
+  workbox: {
+    runtimeCaching: [
+      {
+        urlPattern: 'https://images.unsplash.com/.*',
+        strategyOptions: {
+          cacheName: 'images',
+        },
+        strategyPlugins: [
+          {
+            use: 'Expiration',
+            config: {
+              maxEntries: 60,
+              maxAgeSeconds: 7 * 24 * 60 * 60, // a week
+            },
+          },
+        ],
+      },
+    ],
+  },
 }
