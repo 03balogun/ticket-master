@@ -129,17 +129,19 @@ export default {
   },
   methods: {
     async makePayment() {
-      await this.asyncPayWithFlutterwave(this.paymentData)
-    },
-    makePaymentCallback() {
-      this.$notify({
-        text: `Payment was successful, thank you for choosing ticket master`,
-        type: 'success',
-      })
-      // clear cart
-      this.$store.dispatch('cart/clearCart')
-      // redirect home
-      this.$router.push('/')
+      const response = await this.asyncPayWithFlutterwave(this.paymentData)
+      const isSuccess = response?.status === 'successful'
+      if (isSuccess) {
+        this.closePaymentModal()
+        this.$notify({
+          text: `Payment was successful, thank you for choosing ticket master`,
+          type: 'success',
+        })
+        // clear cart
+        await this.$store.dispatch('cart/clearCart')
+        // redirect home
+        await this.$router.back()
+      }
     },
     paymentModalClose() {
       //
