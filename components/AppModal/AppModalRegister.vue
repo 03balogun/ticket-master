@@ -1,12 +1,17 @@
 <template>
   <section class="registration-container">
-    <form v-if="!isSuccess" class="form" action="" @submit.prevent="">
+    <form
+      v-if="!isSuccess"
+      class="form"
+      action=""
+      @submit.prevent="changeToSuccess"
+    >
       <app-input
         id="full_name"
         label="Full name"
         name="full_name"
         placeholder=""
-        required
+        :required="true"
       />
       <app-input
         id="email_address"
@@ -14,7 +19,7 @@
         label="Email Address"
         name="email_address"
         placeholder=""
-        required
+        :required="true"
       />
       <app-input
         id="phone_number"
@@ -22,16 +27,14 @@
         label="Phone Number"
         name="phone_number"
         placeholder=""
-        required
+        :required="true"
       />
 
-      <button class="button button--md button--block" @click="changeToSuccess">
-        Register
-      </button>
+      <button class="button button--md button--block">Register</button>
     </form>
     <div v-else class="success-screen">
       <circle-check />
-      <p>You have successfully registered for the nathan cole experience.</p>
+      <p>You have successfully registered for the {{ currentEvent.name }}.</p>
     </div>
   </section>
 </template>
@@ -49,6 +52,9 @@ export default {
     }
   },
   computed: {
+    currentEvent() {
+      return this.$store.getters['events/getCurrentEvent']
+    },
     modal() {
       return this.$store.getters['modal/getModal']
     },

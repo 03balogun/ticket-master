@@ -105,7 +105,7 @@ export default {
       return !this.fetchingCurrentEvent && !this.currentEvent.id
     },
     isFreeEvent() {
-      return this.currentEvent.is_free
+      return this.currentEvent.is_free || this.minMaxTicket.min === 0
     },
     minMaxTicket() {
       return this.$store.getters['events/getMinMaxTicket']
