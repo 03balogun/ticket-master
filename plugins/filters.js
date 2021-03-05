@@ -25,3 +25,16 @@ Vue.filter('formatDate', function (value) {
 })
 
 Vue.prototype.$slug = (title) => title.toLowerCase().replace(/ /gi, '-')
+
+Vue.prototype.$getMinMaxTicket = (tickets) => {
+  if (!tickets || tickets.length === 0) {
+    return { min: 0, max: 0 }
+  }
+  const { currency } = tickets[0]
+  const prices = tickets.map((ticket) => ticket.price)
+  return {
+    currency,
+    max: Math.max(...prices),
+    min: Math.min(...prices),
+  }
+}

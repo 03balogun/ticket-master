@@ -21,11 +21,17 @@
         event.name
       }}</nuxt-link>
     </h2>
-    <span class="event__amount">
-      {{ 5000 | currency }} – {{ 2000000 | currency }}
+    <span v-if="ticketMinMax.min > 0" class="event__amount">
+      {{ ticketMinMax.min | currency(ticketMinMax.currency) }} –
+      {{ ticketMinMax.max | currency(ticketMinMax.currency) }}
+    </span>
+    <span
+      v-if="ticketMinMax.min === 0 && !event.is_sold_out"
+      class="status status--green"
+    >
+      Free
     </span>
     <span v-if="event.is_sold_out" class="status status--red"> Sold Out </span>
-    <span v-if="event.is_free" class="status status--green"> Free </span>
   </li>
 </template>
 
@@ -37,6 +43,14 @@ export default {
       type: Object,
       required: true,
     },
+  },
+  data() {
+    return {
+      ticketMinMax: {},
+    }
+  },
+  created() {
+    this.ticketMinMax = this.$getMinMaxTicket(this.event.tickets)
   },
 }
 </script>

@@ -1,11 +1,10 @@
-const PAGE_LIMIT = 15
+const PAGE_LIMIT = 12
 
 export const state = () => ({
   eventData: {
     events: [],
     pageInfo: {},
   },
-  tickets: [],
   currentEvent: {},
   isLoadingEvents: true,
   loadingMore: false,
@@ -25,19 +24,6 @@ export const getters = {
   getLoadingMore: ({ loadingMore }) => loadingMore,
   getCurrentEvent: ({ currentEvent }) => currentEvent,
   getFetchingCurrentEvent: ({ fetchingCurrentEvent }) => fetchingCurrentEvent,
-  getTickets: ({ tickets }) => tickets,
-  getMinMaxTicket: ({ tickets }) => {
-    if (!tickets || tickets.length === 0) {
-      return { min: 0, max: 0 }
-    }
-    const { currency } = tickets[0]
-    const prices = tickets.map((ticket) => ticket.price)
-    return {
-      currency,
-      max: Math.max(...prices),
-      min: Math.min(...prices),
-    }
-  },
 }
 
 export const actions = {
@@ -65,19 +51,38 @@ export const actions = {
         },
       })
 
+      const responseEvents = data.events
+
+      // Make API call to get event tickets
+      const ticketRequest = responseEvents.map((event) =>
+        this.$axios.$get(`/ticket-types/events/${event.id}`)
+      )
+
+      // await response
+      const ticketsResponse = await Promise.all(ticketRequest)
+
+      // merge events and tickets
+      const eventTickets = responseEvents.map((event, index) => ({
+        ...event,
+        tickets: ticketsResponse[index]?.data,
+      }))
+
       // When we fetch events from a new page, merge its result with existing
       if (
         pageInfo.currentPage &&
         pageInfo.currentPage !== data.pageInfo.currentPage
       ) {
-        const events = [...state.eventData.events, ...data.events]
+        const events = [...state.eventData.events, ...eventTickets]
         commit('SET_STATE', {
           key: 'eventData',
           value: { ...data, events },
         })
       } else {
         // When it's a new page, update our state data
-        commit('SET_STATE', { key: 'eventData', value: data })
+        commit('SET_STATE', {
+          key: 'eventData',
+          value: { ...data, events: eventTickets },
+        })
       }
     } catch (e) {
       //
@@ -93,9 +98,6 @@ export const actions = {
     try {
       commit('SET_STATE', { key: 'fetchingCurrentEvent', value: true })
 
-      // reset ticket data
-      commit('SET_STATE', { key: 'tickets', value: [] })
-
       const { data: event } = await this.$axios.$get(`/events/${eventId}`)
 
       // If the event is not free, fetch event tickets
@@ -103,7 +105,7 @@ export const actions = {
         const response = await this.$axios.$get(
           `/ticket-types/events/${eventId}`
         )
-        commit('SET_STATE', { key: 'tickets', value: response.data })
+        event.tickets = response.data
       }
       commit('SET_STATE', { key: 'currentEvent', value: event })
     } catch (e) {

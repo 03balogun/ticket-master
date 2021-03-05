@@ -18,7 +18,7 @@
             :datetime="currentEvent.start_time"
             >{{ currentEvent.start_time | formatDate }}</time
           >
-          <app-cart-tickets />
+          <app-cart-tickets :tickets="currentEvent.tickets" />
           <span class="cart-section__info"
             >Ticket sales ends on
             <time itemprop="endDate" :datetime="currentEvent.end_time">{{

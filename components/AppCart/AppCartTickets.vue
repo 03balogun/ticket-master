@@ -38,10 +38,13 @@ import PlusIcon from '~/assets/images/plus-icon.svg?inline'
 export default {
   name: 'AppCartTickets',
   components: { MinusIcon, PlusIcon },
-  computed: {
-    tickets() {
-      return this.$store.getters['events/getTickets']
+  props: {
+    tickets: {
+      type: Array,
+      required: true,
     },
+  },
+  computed: {
     cartTickets() {
       return this.$store.getters['cart/getCartTickets']
     },

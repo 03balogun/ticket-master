@@ -17,8 +17,8 @@
           {{ currentEvent.description }}
         </p>
         <strong v-if="!isFreeEvent" class="article__amount"
-          >{{ minMaxTicket.min | currency(minMaxTicket.currency) }} –
-          {{ minMaxTicket.max | currency(minMaxTicket.currency) }}</strong
+          >{{ ticketMinMax.min | currency(ticketMinMax.currency) }} –
+          {{ ticketMinMax.max | currency(ticketMinMax.currency) }}</strong
         >
         <button class="button mt-30 button--md" @click="proceed">
           {{ isFreeEvent ? 'Register For Free' : 'Buy Tickets' }}
@@ -82,6 +82,11 @@ import MapIcon from '~/assets/images/map-icon.svg?inline'
 export default {
   name: 'EventDetail',
   components: { MapIcon },
+  data() {
+    return {
+      ticketMinMax: {},
+    }
+  },
   head() {
     return {
       title: `${this.currentEvent.name} - Ticket Master`,
@@ -105,10 +110,7 @@ export default {
       return !this.fetchingCurrentEvent && !this.currentEvent.id
     },
     isFreeEvent() {
-      return this.currentEvent.is_free || this.minMaxTicket.min === 0
-    },
-    minMaxTicket() {
-      return this.$store.getters['events/getMinMaxTicket']
+      return this.currentEvent.is_free || this.ticketMinMax?.min === 0
     },
     fetchingCurrentEvent() {
       return this.$store.getters['events/getFetchingCurrentEvent']
@@ -121,8 +123,12 @@ export default {
     this.fetchEventDetail()
   },
   methods: {
-    fetchEventDetail() {
-      this.$store.dispatch('events/fetchSingleEvent', this.$route.query.id)
+    async fetchEventDetail() {
+      await this.$store.dispatch(
+        'events/fetchSingleEvent',
+        this.$route.query.id
+      )
+      this.ticketMinMax = this.$getMinMaxTicket(this.currentEvent.tickets)
     },
     proceed() {
       const idString = `?id=${this.$route.query.id}`
