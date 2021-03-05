@@ -30,9 +30,6 @@ export const actions = {
   async fetchEvents({ commit, state }, page) {
     const { events, pageInfo } = state.eventData
 
-    // When page number is not set and we have records, abort reloading
-    if (!page && events.length > 0) return
-
     // Only signal loading if events data is empty
     if (events.length === 0) {
       commit('SET_STATE', { key: 'isLoadingEvents', value: true })
