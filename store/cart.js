@@ -13,6 +13,7 @@ const getPropertyTotal = (records, property) => {
 }
 
 export const state = () => ({
+  eventId: null,
   cartTickets: {},
   vat: 1000,
 })
@@ -24,6 +25,7 @@ export const mutations = {
 }
 
 export const getters = {
+  getEventId: (state) => state.eventId,
   getCartTickets: (state) => state.cartTickets,
   getVat: (state) => state.vat,
   getTotalQuantity: (state) => {

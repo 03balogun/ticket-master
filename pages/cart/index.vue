@@ -108,19 +108,28 @@ export default {
     fetchingCurrentEvent() {
       return this.$store.getters['events/getFetchingCurrentEvent']
     },
+    eventId() {
+      return this.$store.getters['cart/getEventId']
+    },
   },
   created() {
     this.fetchEventDetail()
   },
   methods: {
-    fetchEventDetail() {
-      const eventId = this.$route.query.id
-      this.$store.dispatch('events/fetchSingleEvent', eventId)
-
+    async fetchEventDetail() {
+      const selectedEventId = this.$route.query.id
       // When we have a different event, clear cart
-      if (eventId !== this.currentEvent.id) {
-        this.$store.dispatch('cart/clearCart')
+      if (selectedEventId !== this.eventId) {
+        await this.$store.dispatch('cart/clearCart')
       }
+
+      await this.$store.dispatch('events/fetchSingleEvent', selectedEventId)
+
+      // update cart event id
+      this.$store.commit('cart/SET_STATE', {
+        key: 'eventId',
+        value: selectedEventId,
+      })
     },
     toggleSummarySection() {
       this.showSide = !this.showSide

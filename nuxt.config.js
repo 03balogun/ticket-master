@@ -2,8 +2,6 @@ export default {
   generate: {
     fallback: true,
   },
-  // Disable server-side rendering (https://go.nuxtjs.dev/ssr-mode)
-  ssr: false,
   // Target (https://go.nuxtjs.dev/config-target)
   target: 'static',
   publicRuntimeConfig: {
@@ -83,6 +81,21 @@ export default {
   },
   workbox: {
     runtimeCaching: [
+      {
+        urlPattern: 'https://eventsflw.herokuapp.com/v1/.*',
+        strategyOptions: {
+          cacheName: 'api-requests',
+        },
+        strategyPlugins: [
+          {
+            use: 'CacheFirst',
+            config: {
+              maxEntries: 60,
+              maxAgeSeconds: 7 * 24 * 60 * 60, // a week
+            },
+          },
+        ],
+      },
       {
         urlPattern: 'https://images.unsplash.com/.*',
         strategyOptions: {
